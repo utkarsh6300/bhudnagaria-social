@@ -3,7 +3,6 @@ const io = require("socket.io")(8900, {
       origin: ["http://localhost:3000","http://localhost:5000"]
     },
   });
-  // const axios=require('axios');
   
 let users = [];
 
@@ -33,32 +32,16 @@ io.on("connection", (socket) => {
   }); 
 
   //send and get message
-  socket.on("sendMessage", ({ senderId, receiverId, text }) => {
-    const user = getUser(receiverId);
+  socket.on("sendMessage", async({ senderId, recieverId, text }) => {
+    const user = getUser(recieverId);
     //save msg using api with text reciever and sender id
-    const config = {
-      headers: {
-        'Content-Type': 'application/json',
-        // 'token':user
-      }
-    };
-    const formData={
-      sender:senderId,
-      receiver:receiverId,
-      text:text
-    };
-//  try {
-  
-//   //  const res1 = await axios.post('http://localhost:5000/api/message/add',formData , config);
-//   //  console.log(res1);
-//  } catch (error) {
-//   console.error(error);
-//  }
+ 
  
     
     if(user){
     io.to(user.socketId).emit("getMessage", {
-     id:senderId,
+      id:Math.random()*10000000000000000,
+     senderId:senderId,
       data:text,
     });
   } else {

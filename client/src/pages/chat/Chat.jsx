@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import axios from 'axios';
 
 import Connected from '../connected/Connected';
 import Message from '../../components/Message';
@@ -23,51 +24,48 @@ const socket=io("http://localhost:8900");
 
 const Chat = () => {
   const lastMessageRef = useRef(null);
-  // const [activechat, setActivechat] = useState(null);
-  const [msg, setMessages] = useState([{id:"2355",data:"utjk"},
-  {id:"2355456",data:"utj"},
-  {id:"2355456",data:"utj"},
-  {id:"2355456",data:"utj"},
-  {id:"2355456",data:"utj"},
-  {id:"2355456",data:"utj"},
-  {id:"2355456",data:"utj"},
-  {id:"2355456",data:"utj"},
-  {id:"2355456",data:"utj"},
-  {id:"2355456",data:"utj"},
-  {id:"2355456",data:"utj"},
-  {id:"2355456",data:"utj"},
-  {id:"2355456",data:"utj"},
-  {id:"2355456",data:"utj"},
-  {id:"2355456",data:"utj"},
-  {id:"2355456",data:"utj"},
-  {id:"2355456",data:"utj"},
-  {id:"2355456",data:"utj"},
-  {id:"2355456",data:"utj"},
-  {id:"2355456",data:"utj"},
-  {id:"2355456",data:"utj"},
-  {id:"2355456",data:"utj"},
-  {id:"2355456",data:"utj"},
-  {id:"2355456",data:"utj"},
-  {id:"2355456",data:"utj"},
-  {id:"2355456",data:"utj"},
-  {id:"2355456",data:"utj"},
-  {id:"2355456",data:"utj"},
-  {id:"2355456",data:"utj"},
-  {id:"2355456",data:"utj"},
-  {id:"2355456",data:"utj"},
-  {id:"2355456",data:"utj"},
-  {id:"2355456",data:"utj"},
-  {id:"2355456",data:"utj"},
-  {id:"2355456",data:"utj"},
-  {id:"2355456",data:"utj"},
-  {id:"2355456",data:"utj"},
-  {id:"2355456",data:"utj"},
-  {id:"2355456",data:"utj"},
+  const inputRef = useRef(null);
 
+  // const [activechat, setActivechat] = useState(null);
+  const [msg, setMessages] = useState([
+  //   {id:"2355",data:"utjk"},
+  // {id:"235u5456",data:"utj"},
+  // {id:"23556",data:"utj"},
+  // {id:"23u55456",data:"utj"},
+  // {id:"25456",data:"utj"},
+  // {id:"2554j56",data:"utj"},
 ]);
   const {activechat, user,id,error, errors,dispatch} = useContext(AuthContext);
   const [currentmessage, setCurrentMessage] = useState('');
+ useEffect(() => {
+  const fetchdata= async ()=>{
+    try {
+      const config = {
+        headers: {
+          'Content-Type': 'application/json',
+          'token':user
+        }
+      };
+      const formData={
+        sender:id,
+        reciever:activechat
+      };
+     
+      const res1 = await axios.post('http://localhost:5000/api/message/get',formData , config);
+      console.log(res1);
+      setMessages(res1.data.msg);
+    } catch (error) {
+     console.error(error);
+    }
 
+  
+    }
+    fetchdata();
+ }, [activechat])
+ 
+  useEffect(() => {
+    inputRef.current.focus();
+  }, []);
   useEffect(() => {
     // 👇️ scroll to bottom every time messages change
     lastMessageRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -80,7 +78,13 @@ const Chat = () => {
    
   });
   socket.on("getMessage",(data)=>{
-    setMessages(prev=>[...prev,data]);
+    const data2={
+      id:data.id,
+      sender:data.senderId,
+      reciever:id,
+      text:data.data,
+    }
+    setMessages(prev=>[...prev,data2]);
     console.log(data); 
   });
   socket.on("getError",(data)=>{
@@ -100,16 +104,42 @@ const Chat = () => {
     setCurrentMessage(event.target.value); 
     // console.log(event.target.value); 
   }
-  const handleSubmit = (event) => {
+  const handleSubmit = async(event) => {
     event.preventDefault();
    
-   activechat && socket.emit("sendMessage",{senderId:id,receiverId:activechat,text:currentmessage });
+   activechat && socket.emit("sendMessage",{senderId:id,recieverId:activechat,text:currentmessage });
+   const data2={
+      id:Math.random()*10000000000000000,
+    sender:id,
+    reciever:activechat,
+    text:currentmessage,
+  }
+  setMessages(prev=>[...prev,data2]);
     // , (response) => {
     //   console.log(response.status); // ok
     // });
     // console.log(currentmessage);
     // Send the message to the server or save it to the database here
+    try {
+   const config = {
+     headers: {
+       'Content-Type': 'application/json',
+       'token':user
+     }
+   };
+   const formData={
+     sender:id,
+     reciever:activechat,
+     text:currentmessage,
+   };
+  
+   const res1 = await axios.post('http://localhost:5000/api/message/add',formData , config);
+   console.log(res1);
+ } catch (error) {
+  console.error(error);
+ }
     setCurrentMessage('');
+    inputRef.current.focus();
   }
   
   const theme=useTheme()
@@ -202,15 +232,17 @@ marginRight:"-1%",
   width: "-webkit-fill-available",
 }}/>
 </Box> */}
-<TextField
-         onChange={handleChange}
-         value={currentmessage}
-        label="Enter Message"
+<TextField   
+  //  autoFocus
+  onKeyDown={(e)=>e.key==='Enter'&&handleSubmit(e)}
+  inputRef={inputRef}   
+  onChange={handleChange}
+  value={currentmessage}
+  label="Enter Message"
         InputProps={{
           endAdornment: (
             <InputAdornment position="end">
               <IconButton onClick={handleSubmit} 
-              // onKeyDown={(e)=>e.key==='Enter'&&console.log("enter")}
              edge="end" color="primary">
                 <SendIcon  />
               </IconButton>

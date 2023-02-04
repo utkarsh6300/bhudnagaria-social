@@ -6,6 +6,7 @@ const auth = require('../../middlewares/auth');
 
 router.post('/add',[auth],async(req,res)=>{
     try{
+      // console.log(req.body);
         if(!(req.body.sender||req.body.reciever||req.body.text)) res.status(500).send("empty fields");
    const message=new Message({"sender":req.body.sender,"reciever":req.body.reciever,"text":req.body.text});
   let data= await message.save();
