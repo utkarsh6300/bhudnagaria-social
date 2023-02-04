@@ -1,58 +1,33 @@
 import React from 'react'
-import Avatar from '@mui/material/Avatar';
-import Button from '@mui/material/Button';
-import CssBaseline from '@mui/material/CssBaseline';
-import TextField from '@mui/material/TextField';
+import {useNavigate}  from 'react-router-dom';
 
-import Link from '@mui/material/Link';
-import Grid from '@mui/material/Grid';
-import Box from '@mui/material/Box';
-import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
-import Typography from '@mui/material/Typography';
-import Container from '@mui/material/Container';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { useState,useContext } from 'react'; 
+import { AuthContext } from "../../context/AuthContext";  
 
-import Header from '../../components/Header';
-import { Alert } from '@mui/material';
-
-import { useState,useEffect,useContext } from 'react'; ///
 import axios from 'axios'
 
-import {useNavigate}  from 'react-router-dom';
-import IconButton from '@mui/material/IconButton';
-import Collapse from '@mui/material/Collapse';
+import {Avatar,Button,Alert,Collapse,IconButton} from '@mui/material';
+import { Typography,Container,Box ,Grid,Link,CssBaseline,TextField} from '@mui/material';
+
+import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import CloseIcon from '@mui/icons-material/Close';
 
+import Header from '../../components/Header';
+import Copyright from '../../components/Copyright';
 
-
-import { AuthContext } from "../../context/AuthContext";  ///
-
-
+import { createTheme, ThemeProvider } from '@mui/material/styles';
+import Error from '../../components/Error';
 
 const theme = createTheme();
-function Copyright(props) {
-  return (
-    <Typography variant="body2" color="text.secondary" align="center" {...props}>
-      {'Copyright © '}
-      <Link color="inherit" href="https://mui.com/">
-        Bhudnagaria-Social
-      </Link>{' '}
-      {new Date().getFullYear()}
-      {'.'}
-    </Typography>
-  );
-}
 
 const Register = () => {
   let navigate = useNavigate();
-  const { user ,errors,dispatch} = useContext(AuthContext);  ////
+  const {  errors,dispatch} = useContext(AuthContext);  
 
 
 const [username, setUsername] = useState('');
 const [validUsername, setValidUsername] = useState(false);
 const [error, setError] = useState(false);
-
-
 
  const checkUsername=async (event=null)=>{
    event?.preventDefault();
@@ -137,7 +112,10 @@ const [error, setError] = useState(false);
    
     const res = await axios.post('http://localhost:5000/api/signup',formData , config);
     if(res.status===200) {
-      localStorage.setItem("user",res.data.token);
+      // localStorage.setItem("user",res.data.token);
+      // localStorage.setItem("username",res.data.username);
+      dispatch({ type: "LOGIN_SUCCESS",payload:{user:res.data.token,id:res.data.id}});
+      dispatch({ type: "AUTHENTICATE"});
       navigate('/home');
         
     }
@@ -159,8 +137,9 @@ const [error, setError] = useState(false);
   };
   
   return (
-    <>
-      <Box sx={{ width: '100%' ,height:"3vh"}}>
+   
+    <ThemeProvider theme={theme}>
+      {/* <Box sx={{ width: '100%' ,height:"3vh"}}>
       <Collapse in={error}>
         <Alert severity='error'
           action={
@@ -181,13 +160,13 @@ const [error, setError] = useState(false);
         </Alert>
       </Collapse>
       
-    </Box>
-      <ThemeProvider theme={theme}>
+    </Box> */}
+    <Error/>
         <Container component="main" maxWidth="xs">
           <CssBaseline />
           <Box
             sx={{
-              marginTop: 8,
+              marginTop: 4,
               display: 'flex',
               flexDirection: 'column',
               alignItems: 'center',
@@ -295,7 +274,7 @@ const [error, setError] = useState(false);
           <Copyright sx={{ mt: 5 }} />
         </Container>
       </ThemeProvider>
-    </>
+ 
   )
 }
 

@@ -20,7 +20,7 @@ async(req,res)=> {
 
         
     } catch (error) {
-        console.error(err.message);
+        console.error(error.message);
         res.status(500).json({ msg:'server error',
         state:false
         });

@@ -31,9 +31,9 @@ router.post('/',[
      try{
    let user;
      // see if user exists
-     if(email)
-    user=await User.findOne({ email });
-    else   user=await User.findOne({ username });
+     user=await User.findOne({ email });
+     if(!user)
+      user=await User.findOne({ username });
   
      
      if(!user){
@@ -57,7 +57,7 @@ router.post('/',[
   
   const token = await jwt.sign(payload,     config.get('jwtSecret'),    { expiresIn:3600000 } );
 
-     await res.json({token});
+     await res.json({token,id:user.id});
 
   
   

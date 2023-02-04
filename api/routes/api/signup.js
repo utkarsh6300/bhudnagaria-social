@@ -65,7 +65,7 @@ async(req,res)=> {
  
 const token = await jwt.sign(payload,     config.get('jwtSecret'),    { expiresIn:3600000 } );
 
-     await res.json({token});
+     await res.json({token,id:user.id});
  
     }
     catch(err){

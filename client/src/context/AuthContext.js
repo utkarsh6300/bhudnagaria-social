@@ -4,10 +4,12 @@ import AuthReducer from "./AuthReducer";
 
 const INITIAL_STATE = {
     user:localStorage.getItem("user") || null,
+    id:localStorage.getItem("id") || null,
     isAuthenticated:false,
     isFetching: false,
     error: false,
-    errors:[]
+    errors:[],
+    activechat:null
   };
 
   
@@ -17,17 +19,20 @@ const INITIAL_STATE = {
     const [state, dispatch] = useReducer(AuthReducer, INITIAL_STATE);
     
     useEffect(()=>{
-      localStorage.setItem("user", state.user)
-    },[state.user])
+      localStorage.setItem("user", state.user);
+      localStorage.setItem("id", state.id);
+    },[state.user,state.username])
     
     return ( 
       <AuthContext.Provider
         value={{
           user: state.user,
+          id: state.id,
           isFetching: state.isFetching,
-          isAuthenticated:isAuthenticated,
+          isAuthenticated:state.isAuthenticated,
           error: state.error,
           errors: state.errors,
+          activechat:state.activechat,
           dispatch,
         }}
       >

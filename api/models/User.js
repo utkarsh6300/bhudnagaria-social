@@ -42,6 +42,10 @@ const UserSchema =new mongoose.Schema({
     connectionrequest:{
         type:Array,
         default:[]
+    },
+    sentconnectionrequest:{
+        type:Array,
+        default:[]
     }
 })
 
