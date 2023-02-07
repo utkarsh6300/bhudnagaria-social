@@ -7,8 +7,9 @@ const auth = require('../../middlewares/auth');
 router.post('/add',[auth],async(req,res)=>{
     try{
       // console.log(req.body);
-        if(!(req.body.sender||req.body.reciever||req.body.text)) res.status(500).send("empty fields");
-   const message=new Message({"sender":req.body.sender,"reciever":req.body.reciever,"text":req.body.text});
+
+        if(!(req.body.reciever||req.body.text)) res.status(500).send("empty fields");
+   const message=new Message({"sender":req.user.id,"reciever":req.body.reciever,"text":req.body.text});
   let data= await message.save();
 //   console.log(data);
   res.json({msg:"savedmessage"});
@@ -20,8 +21,8 @@ router.post('/add',[auth],async(req,res)=>{
 }); 
 router.post('/get',[auth],async(req,res)=>{
     try{
-        if(!(req.body.sender||req.body.reciever)) res.status(500).send("empty fields");
-   const message=await Message.find({"sender":{$in:[req.body.sender,req.body.reciever]},"reciever":{$in:[req.body.sender,req.body.reciever]},isdeleted:false});
+        // if(!(req.body.reciever)) res.status(500).send("empty fields");
+   const message=await Message.find({"sender":{$in:[req.user.id,req.body.reciever]},"reciever":{$in:[req.user.id,req.body.reciever]},isdeleted:false});
 //   console.log(message);
   res.json({msg:message});
 }

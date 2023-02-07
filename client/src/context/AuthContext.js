@@ -5,7 +5,7 @@ import AuthReducer from "./AuthReducer";
 const INITIAL_STATE = {
     user:localStorage.getItem("user") || null,
     id:localStorage.getItem("id") || null,
-    isAuthenticated:false,
+    isAuthenticated:localStorage.getItem("isAuthenticated")||"false",
     isFetching: false,
     error: false,
     errors:[],
@@ -21,7 +21,8 @@ const INITIAL_STATE = {
     useEffect(()=>{
       localStorage.setItem("user", state.user);
       localStorage.setItem("id", state.id);
-    },[state.user,state.username])
+      localStorage.setItem("isAuthenticated",state.isAuthenticated);
+    },[state.user,state.username,state.isAuthenticated])
     
     return ( 
       <AuthContext.Provider

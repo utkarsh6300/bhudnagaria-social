@@ -36,7 +36,7 @@ setConnecteduser(res.data);
   fetchdata();
 }, [])
 
-  return (
+  return ( 
     <Grid container spacing={2}>
     
         
@@ -71,7 +71,7 @@ setConnecteduser(res.data);
                 }
               }}
             >
-              {connecteduser.map((elevation) => (
+              {connecteduser.map((user1) => (
                 <Grid    sx={{margin:"0",padding:"2%", width:"100%", display:'flex', justifyContent:'center',alignItems:"center",
                 fontSize:"larger", 
                 fontWeight:"bold",
@@ -81,12 +81,12 @@ setConnecteduser(res.data);
           
                 },
               }}   onClick={
-                ()=>{ dispatch({type:"SET_ACTIVE_CHAT",payload:elevation})}
+                ()=>{ dispatch({type:"SET_ACTIVE_CHAT",payload:user1})}
               } 
-              key={elevation} >
+              key={user1} >
                 {/* item key={elevation} elevation={elevation}> */}
                   {/* {`elevation=${elevation}`}  */}
-                  {elevation} 
+                  {user1} 
                    {/* <Link to="/messenger/chat">chat</Link> */}
                 </Grid>
               ))}

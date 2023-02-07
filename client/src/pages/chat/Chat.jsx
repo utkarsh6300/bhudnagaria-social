@@ -37,6 +37,10 @@ const Chat = () => {
 ]);
   const {activechat, user,id,error, errors,dispatch} = useContext(AuthContext);
   const [currentmessage, setCurrentMessage] = useState('');
+  const dispatcherror=()=>{
+    // console.log("heyy");
+    dispatch({type:"SET_ERRORS",payload:"OTHER USER OFFLINE"});
+  }
  useEffect(() => {
   const fetchdata= async ()=>{
     try {
@@ -52,7 +56,7 @@ const Chat = () => {
       };
      
       const res1 = await axios.post('http://localhost:5000/api/message/get',formData , config);
-      console.log(res1);
+      // console.log(res1);
       setMessages(res1.data.msg);
     } catch (error) {
      console.error(error);
@@ -73,22 +77,23 @@ const Chat = () => {
 
   useEffect(() => {
   socket.on("connect", () => {
-    console.log(socket.id); // x8WIv7-mJelg7on_ALbx
+    // console.log(socket.id); // x8WIv7-mJelg7on_ALbx
     socket.emit("addUser",id);
    
   });
   socket.on("getMessage",(data)=>{
     const data2={
-      id:data.id,
+      _id:data.id,
       sender:data.senderId,
       reciever:id,
       text:data.data,
     }
     setMessages(prev=>[...prev,data2]);
-    console.log(data); 
+    // console.log(data); 
   });
   socket.on("getError",(data)=>{
-    console.log(data); 
+    dispatcherror();
+    // console.log(data); 
   });
   
   socket.on("disconnect", () => {
@@ -106,10 +111,12 @@ const Chat = () => {
   }
   const handleSubmit = async(event) => {
     event.preventDefault();
-   
+   if(!activechat){
+    dispatch({type:"SET_ERRORS",payload:"NO CHAT SELECTED"});
+    return;}
    activechat && socket.emit("sendMessage",{senderId:id,recieverId:activechat,text:currentmessage });
    const data2={
-      id:Math.random()*10000000000000000,
+    _id:Math.random()*10000000000000000,
     sender:id,
     reciever:activechat,
     text:currentmessage,
@@ -134,9 +141,9 @@ const Chat = () => {
    };
   
    const res1 = await axios.post('http://localhost:5000/api/message/add',formData , config);
-   console.log(res1);
+  //  console.log(res1);
  } catch (error) {
-  console.error(error);
+  console.error(error.response.data);
  }
     setCurrentMessage('');
     inputRef.current.focus();

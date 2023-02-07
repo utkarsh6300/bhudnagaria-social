@@ -46,7 +46,7 @@ const ConnectionRequestAccept = () => {
 
       <Typography variant="h5" color="initial"
       sx={{fontSize:"100%" ,fontWeight:"bold"}}
-      >ConnectionRequestAccept</Typography>
+      >ConnectionRequests</Typography>
       </Box>
      
 

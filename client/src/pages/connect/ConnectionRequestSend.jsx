@@ -80,13 +80,13 @@ const handlesendconnectionrequest=async(e)=>{
       {/* <h3>Add Friend</h3> */}
     <Paper
       component="form"
+      onKeyDown={(e)=>{e.key==='Enter' &&handlesearch(e)}} 
       sx={{ p: '2px 4px', display: 'flex', alignItems: 'center', width: "100%" }}
       >
       <InputBase
         sx={{ ml: 1, flex: 1 }}
         placeholder="Search Username or Email" 
         onChange={handleinput}
-        onKeyDown={(e)=>{e.key==='Enter' &&( e.preventDefault() && handlesearch())}} 
         />
       <IconButton type="button" sx={{ p: '10px' }} aria-label="search"
       onClick={handlesearch}
@@ -97,7 +97,7 @@ const handlesendconnectionrequest=async(e)=>{
 
         </Box>
    <Paper
-    sx={{ m:1,p: '2px 4px', display: 'flex', alignItems: 'center',flexDirection:"column", width: "96%" ,height:"52vh",
+    sx={{ m:1,p: '2px 4px', display: 'flex', alignItems: 'center',flexDirection:"column", width: "96%" ,height:"48.9vh",
    overflow:"auto",
   }}
     >

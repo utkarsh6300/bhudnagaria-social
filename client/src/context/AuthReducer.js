@@ -24,6 +24,7 @@
             user: null,
           id:null,
           isFetching: false,
+          isAuthenticated:"false",
           error: true,
           errors:[action.payload]
         };
@@ -42,12 +43,12 @@
         case "AUTHENTICATE":
           return {
             ...state,
-            isAuthenticated:true
+            isAuthenticated:"true"
         };
         case "UN_AUTHENTICATE":
           return {
             ...state,
-            isAuthenticated:false
+            isAuthenticated:"false"
         };
         case "SET_ACTIVE_CHAT":
           return {

@@ -39,6 +39,8 @@ router.post('/accept',[auth],async(req,res)=>{
     ,
     {sentconnectionrequest:req.user.id}
     );
+    await User.findByIdAndUpdate(req.user.id,{ $pull: {connectionrequest:req.body.connectionid } });
+    await User.findByIdAndUpdate(req.body.connectionid,{ $pull: {connectionrequest:req.user.id} });
     // res.status(200).json(res1);
     res.json({msg:"accepted request"});
   
