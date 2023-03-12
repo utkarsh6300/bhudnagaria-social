@@ -5,7 +5,7 @@ const config=require('config');
 
 router.get('/',[],async(req,res)=>{
     const token=req.header('token'); 
-    if(!token){
+    if(!token||token==='null'){
   
         return res.status(401).json({msg:"No token,authorization denied"});
     }
