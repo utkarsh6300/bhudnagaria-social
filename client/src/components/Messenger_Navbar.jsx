@@ -36,7 +36,9 @@ function ResponsiveAppBar() {
 
   return (
     <AppBar position="static"  sx={{width:"50%",
-    marginLeft:"25%"
+    marginLeft:"25%",
+    '@media(minWidth: 600px)' : 
+     {  marginLeft:"2%"}
     
     }}>
       <Container maxWidth="xl"  >

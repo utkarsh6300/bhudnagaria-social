@@ -81,12 +81,12 @@ setConnecteduser(res.data);
           
                 },
               }}   onClick={
-                ()=>{ dispatch({type:"SET_ACTIVE_CHAT",payload:user1})}
+                ()=>{ dispatch({type:"SET_ACTIVE_CHAT",payload:user1._id})}
               } 
-              key={user1} >
+              key={user1._id} >
                 {/* item key={elevation} elevation={elevation}> */}
                   {/* {`elevation=${elevation}`}  */}
-                  {user1} 
+                  {user1.name} 
                    {/* <Link to="/messenger/chat">chat</Link> */}
                 </Grid>
               ))}

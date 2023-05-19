@@ -10,7 +10,7 @@ router.get('/',[],async(req,res)=>{
         return res.status(401).json({msg:"No token,authorization denied"});
     }
     try{
-        const decoded=  await jwt.verify(token,config.get('jwtSecret'));
+        const decoded=  await jwt.verify(token,process.env.JWTSECRET ||config.get('jwtSecret'));
         console.log(decoded);
     res.status(200).json({msg:"Token is  valid"});
 

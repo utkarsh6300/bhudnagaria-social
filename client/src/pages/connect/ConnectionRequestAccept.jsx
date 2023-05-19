@@ -22,7 +22,7 @@ const ConnectionRequestAccept = () => {
     const res= await axios.get('http://localhost:5000/api/connecteduser/requests',config);
     
     console.log(res.data);
-    setconnectionrequestspending(res.data.connectionrequest);
+    setconnectionrequestspending(res.data);
     // console.log(connectionrequestspending.connectionrequest);
       }
       fetchdata();
@@ -63,9 +63,9 @@ const ConnectionRequestAccept = () => {
       >
       <Typography variant="p" color="initial" width="90%">No Pending Request</Typography>
   </Paper>
- :  connectionrequestspending.map((id)=>{
+ :  connectionrequestspending.map((data)=>{
 
-  return <Connectiondetails key={id} id={id}/>
+  return <Connectiondetails key={data._id} id={data._id} name={data.name}/>
  })
     //  <Paper
     //  sx= {{width:"100%",padding:"1%",margin:"0",display:"flex",flexDirection:"row",alignItems:"center" }}

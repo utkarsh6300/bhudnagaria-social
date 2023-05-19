@@ -6,7 +6,7 @@ import Paper from '@mui/material/Paper';
 import IconButton from '@mui/material/IconButton';
 import axios from 'axios';
 
-const Connectiondetails = ({id}) => {
+const Connectiondetails = ({id,name}) => {
   const handleacceptconnectionrequest=async(e)=>{
     e.preventDefault();
     try {
@@ -33,7 +33,7 @@ const Connectiondetails = ({id}) => {
     <Paper
     sx= {{width:"100%",padding:"1%",margin:"0",display:"flex",flexDirection:"row",alignItems:"center" }}
     >
-    <Typography variant="p" color="initial" width="90%">{id}</Typography>
+    <Typography variant="p" color="initial" width="90%">{name}</Typography>
     <IconButton aria-label="connect"  type="button" sx={{ }}
     onClick={handleacceptconnectionrequest}
     >

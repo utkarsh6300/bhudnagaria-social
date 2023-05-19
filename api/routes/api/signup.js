@@ -63,7 +63,7 @@ async(req,res)=> {
    }
  }
  
-const token = await jwt.sign(payload,     config.get('jwtSecret'),    { expiresIn:3600000 } );
+const token = await jwt.sign(payload, process.env.JWTSECRET ||config.get('jwtSecret'), { expiresIn:3600000 } );
 
      await res.json({token,id:user.id});
  

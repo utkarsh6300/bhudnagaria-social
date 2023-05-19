@@ -4,44 +4,59 @@ const User=require('../../models/User');
 const auth = require('../../middlewares/auth');
 
 
+var mongoose = require('mongoose');
+
 router.get('/',[auth],async(req,res)=>{
     try{
     //   if(req.body.id!=req.user.id) return  res.status(500).send('server error');
   let data= await User.findById(req.user.id).select("connected");
+  let responsedata = [];
+
+  for (const data2 of data.connected) {
+    try {
+      let data3 = mongoose.Types.ObjectId(data2);
+      let res1 = await User.findById(data3).select("name");
+      // console.log(res1);
+      responsedata.push(res1);
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  console.log(responsedata);
+  res.json(responsedata);
   // console.log(data);
-  res.json(data.connected);
+  // res.json(data.connected);
 }
   catch(err){
     console.error(err.message);
     res.status(500).send('server error');
   }
 });
-router.get('/requests',[auth],async(req,res)=>{
-    try{
-    //   if(req.body.id!=req.user.id) return  res.status(500).send('server error');
-  let data= await User.findById(req.user.id).select("connectionrequest");
-    // let responsedata=[];
-//    await data.connectionrequest.forEach(async(data2)=>{
-//       try {
-        
-//         let res1= await User.findById(data2).select("name");
-//         let name=res1.name
-//         // console.log({id:data2,name:name.name});
-//         responsedata=[...responsedata,{id:data2,name:name}];
-//       } catch (error) { 
-//         console.error(error);
-//       }
-// });
-//  await console.log(responsedata); 
-  // search each id add its name and send response
-  // console.log(data);
-  res.json(data);
-}
-  catch(err){
+router.get('/requests', [auth], async (req, res) => {
+  try {
+    let data = await User.findById(req.user.id).select("connectionrequest");
+    let responsedata = [];
+
+    for (const data2 of data.connectionrequest) {
+      try {
+        let data3 = mongoose.Types.ObjectId(data2);
+        let res1 = await User.findById(data3).select("name");
+        // console.log(res1);
+        responsedata.push(res1);
+      } catch (error) {
+        console.error(error);
+      }
+    }
+
+    console.log(responsedata);
+    res.json(responsedata);
+  } catch (err) {
     console.error(err.message);
     res.status(500).send('server error');
   }
 });
+
 
 
 
